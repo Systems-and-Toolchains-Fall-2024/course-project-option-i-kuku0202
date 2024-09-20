@@ -4,3 +4,8 @@
 Yue Su    yuesu 
 
 Junyi-Xu  johnx
+
+Description of the column features:
+- sofifa_id: Integer    People unique id in FIFA
+- player_url: Text      The url to the player website
+- short_name: Text      
