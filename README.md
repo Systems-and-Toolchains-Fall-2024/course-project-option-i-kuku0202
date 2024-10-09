@@ -1,9 +1,11 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/VuODydzp)
 
 
-Yue Su    yuesu 
+**Name**: Yue Su  
+**AndrewID**: yuesu 
 
-Junyi-Xu  johnx
+**Name**: Junyi Xu  
+**AndrewID**: johnx
 
 ## Description of the column features:
 - **sofifa_id**:People unique id in FIFA
@@ -95,9 +97,10 @@ The following fields represent positional ratings, indicating a player's ability
 - **nation_logo_url**: URL linking to the national team’s logo image.
 - **nation_flag_url**: URL linking to the player’s nationality flag image.
 - **year**: Year of the dataset entry.
+- **gender**: Gender of player.
 - **unique_id**: Unique identifier for the dataset entry.
 
 
 
 ### Why PostgreSQL over NoSQL?
-In this dataset, it has a consistent, well-defined structure, which fits well in the table-based schema of PostgreSQL. The PostgreSQL ensures data integrity and supports ACID transactions. And it easy to execute complex SQL queries, combining tables, filter data, and perform aggregations. However, NoSQL databases are better suited for unstructured data or flexible schema scenarios that change frequently. So it does not fit this table well.
+This dataset has a consistent, well-defined structure, which fits well in the table-based schema of PostgreSQL. The PostgreSQL ensures data integrity and supports ACID transactions. It is easy to execute complex SQL queries, combining tables, filter data, and perform aggregations. NoSQL databases are better suited for unstructured data or flexible schema scenarios that change frequently. So it does not fit this table well.
