@@ -105,7 +105,8 @@ The following fields represent positional ratings, indicating a player's ability
 This dataset has a consistent, well-defined structure, which fits well in the table-based schema of PostgreSQL. The PostgreSQL ensures data integrity and supports ACID transactions. It is easy to execute complex SQL queries, combining tables, filter data, and perform aggregations. NoSQL databases are better suited for unstructured data or flexible schema scenarios that change frequently. So it does not fit this table well.
 
 # Task 2
-## Please our results on our code
+## Please our results on our description notebook
+
 
 
 # Task 3
