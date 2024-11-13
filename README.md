@@ -7,6 +7,8 @@
 **Name**: Junyi Xu  
 **AndrewID**: johnx
 
+
+# Task 1
 ## Description of the column features:
 - **sofifa_id**:People unique id in FIFA
 - **player_url**:The url to the player website
@@ -86,11 +88,6 @@
 - **goalkeeping_positioning**: Positioning awareness for goalkeepers.
 - **goalkeeping_reflexes**: Reflexes for goalkeepers.
 - **goalkeeping_speed**: Speed for goalkeepers.
-###### Position Ratings
-The following fields represent positional ratings, indicating a player's ability to perform in each field position:
-
-- **ls, st, rs, lw, lf, cf, rf, rw, lam, cam, ram, lm, lcm, cm, rcm, rm, lwb, ldm, cdm, rdm, rwb, lb, lcb, cb, rcb, rb, gk**: Ratings for the respective positions.
-
 - **player_face_url**: URL linking to an image of the player’s face.
 - **club_logo_url**: URL linking to the club’s logo image.
 - **club_flag_url**: URL linking to the club’s country flag image.
@@ -100,7 +97,69 @@ The following fields represent positional ratings, indicating a player's ability
 - **gender**: Gender of player.
 - **unique_id**: Unique identifier for the dataset entry.
 
+The following fields represent positional ratings, indicating a player's ability to perform in each field position:
+- **ls, st, rs, lw, lf, cf, rf, rw, lam, cam, ram, lm, lcm, cm, rcm, rm, lwb, ldm, cdm, rdm, rwb, lb, lcb, cb, rcb, rb, gk**: Ratings for the respective positions.
 
 
 ### Why PostgreSQL over NoSQL?
 This dataset has a consistent, well-defined structure, which fits well in the table-based schema of PostgreSQL. The PostgreSQL ensures data integrity and supports ACID transactions. It is easy to execute complex SQL queries, combining tables, filter data, and perform aggregations. NoSQL databases are better suited for unstructured data or flexible schema scenarios that change frequently. So it does not fit this table well.
+
+# Task 2
+## Please our results on our code
+
+
+# Task 3
+## Data Clearning
+We conduct the following operations to clean the data:
+1. Remove redundant columns (columns unhelpful to inferring outcome)
+2. Convert positional ratings to numeric value by adopting the first half
+3. Remov columns with more than 1/5 of entires missing
+4. Perform imputation on the rest of columns with NaN entiires based on the column data type:
+    - Impute with mean value if the column is of `FloatType()`
+    - Impute with median value if the column is of `IntegerType()`
+    - Impute with mode value if the column is of `StringType()`
+
+The steps are as follows:
+- Step 1: Import everything from `preprocess.py
+- Step 2: Load original data from pyAdmin
+- Step 3: Run `clean_data(df)` function to get the cleaned dataframe
+
+## Data Engineering
+We perform data engineering by following these steps:\
+- 1. Cast columns with continuous values into `FloatType()`
+- 2. Rename the ground truth column `overall` to `outcome`
+- 3. Apply string indexer and one-hot-encoder to columns with nominal and binary values
+- 4. Vectorize all feature columns
+- 5. Scale the vectorized feature column to prepare for the model training
+- 6. Drop redundant columns
+
+All procedures are grouped into a single pipline and can be directly applied to the clearned dataframe
+
+## Pyspark implementation
+We use Linear Regression and Gradient Boosted Decision Tree to train and test the data. Below are the details of training and testing for each model:
+### Linear Regression
+- 1. Split the data into training and testing set
+- 2. Build the Linear Regression model and regression evaluator
+- 3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `regParam` and `elasticNetParam`
+    - `regParam`: Regularization to prevent model overfitting
+    - `elasticNetParam`: Type of regularization to use (L1, L2, or mix)
+- 4. Create cross validator using the model, parameter grid, and evaluator
+- 5. Fit the model to the training data with 5-fold cross validation
+- 6. Record the mode with best performance and evaludate it on the testing set.
+### Gradient Boosted Decision Tree
+- 1. Split the data into training and testing set
+- 2. Build the Gradient Boosted Decision Tree model and regression evaluator
+- 3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `maxDepth`, `maxIter`, and `stepSize`
+    - `maxDepth`: Depth of the tree
+    - `maxIter`: Maximum number of iteration
+    - `stepSize`: Learning rate
+- 4. Create cross validator using the model, parameter grid, and evaluator
+- 5. Fit the model to the training data with 5-fold cross validation
+- 6. Record the mode with best performance and evaludate it on the testing set.
+
+
+## Pytorch implementation
+- 1. We first split the data into training, validation, test in 0.6, 0.2, 0.2 and change the X and y into numpy in each dataset.
+- 2. We have built two models, one is shallow(1 layer), one is deep(3 layers).
+- 3. We use two learning rate: [0.01,0.001] and two batch size[32,64] to do the tuning. By doing the combinations, we get our best model: {'lr': 0.01, 'batch_size': 64} for simple, and {'lr': 0.01, 'batch_size': 32} for complex.
+- 4. We then do the test and get our rmse: Simple: 2.5094, Multiple: 0.9050.
