@@ -189,4 +189,8 @@ Altogether we used three different models: Linear Regression (shallow neural net
 
 
 ### Video
-If you cannot get access video, please follow the link below: https://cmu.box.com/s/yuukwgewzcxpof05au0nu10dbt2refa6
+We recorded two videos for the explanation of our project under `vidoes/` directory:
+- [overview.mp4](videos/overview.mp4): this video goes over the detailed procedures in running our code for task 1-3
+- [google_cloud.mp4](vidoes/google_cloud.mp4): this video goes over the google cloud deployment of our code
+
+If you cannot access these videos, please follow the link below: https://cmu.box.com/s/yuukwgewzcxpof05au0nu10dbt2refa6
