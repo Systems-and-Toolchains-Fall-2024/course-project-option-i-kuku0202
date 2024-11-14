@@ -100,13 +100,12 @@
 The following fields represent positional ratings, indicating a player's ability to perform in each field position:
 - **ls, st, rs, lw, lf, cf, rf, rw, lam, cam, ram, lm, lcm, cm, rcm, rm, lwb, ldm, cdm, rdm, rwb, lb, lcb, cb, rcb, rb, gk**: Ratings for the respective positions.
 
-
 ### Why PostgreSQL over NoSQL?
 This dataset has a consistent, well-defined structure, which fits well in the table-based schema of PostgreSQL. The PostgreSQL ensures data integrity and supports ACID transactions. It is easy to execute complex SQL queries, combining tables, filter data, and perform aggregations. NoSQL databases are better suited for unstructured data or flexible schema scenarios that change frequently. So it does not fit this table well.
 
-# Task 2
-## Please our results on our description notebook
 
+# Task 2
+## Please see the results in `analysis.ipynb`
 
 
 # Task 3
@@ -127,49 +126,67 @@ The steps are as follows:
 
 ## Data Engineering
 We perform data engineering by following these steps:\
-- 1. Cast columns with continuous values into `FloatType()`
-- 2. Rename the ground truth column `overall` to `outcome`
-- 3. Apply string indexer and one-hot-encoder to columns with nominal and binary values
-- 4. Vectorize all feature columns
-- 5. Scale the vectorized feature column to prepare for the model training
-- 6. Drop redundant columns
+1. Cast columns with continuous values into `FloatType()`
+2. Rename the ground truth column `overall` to `outcome`
+3. Apply string indexer and one-hot-encoder to columns with nominal and binary values
+4. Vectorize all feature columns
+5. Scale the vectorized feature column to prepare for the model training
+6. Drop redundant columns
 
 All procedures are grouped into a single pipline and can be directly applied to the clearned dataframe
 
 ## Pyspark implementation
 We use Linear Regression and Gradient Boosted Decision Tree to train and test the data. Below are the details of training and testing for each model:
+
 ### Linear Regression
-- 1. Split the data into training and testing set
-- 2. Build the Linear Regression model and regression evaluator
-- 3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `regParam` and `elasticNetParam`
+1. Split the data into training and testing set
+2. Build the Linear Regression model and regression evaluator
+3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `regParam` and `elasticNetParam`
     - `regParam`: Regularization to prevent model overfitting
     - `elasticNetParam`: Type of regularization to use (L1, L2, or mix)
-- 4. Create cross validator using the model, parameter grid, and evaluator
-- 5. Fit the model to the training data with 5-fold cross validation
-- 6. Record the mode with best performance and evaludate it on the testing set.
+4. Create cross validator using the model, parameter grid, and evaluator
+5. Fit the model to the training data with 5-fold cross validation
+6. Record the mode with best performance and evaludate it on the testing set.
+
+**Performance:** 
+- Best mode when `regParam=0.1, elasticNetParam=0.0, maxIter=100`
+- Test RMSE = 2.5087
+
 ### Gradient Boosted Decision Tree
-- 1. Split the data into training and testing set
-- 2. Build the Gradient Boosted Decision Tree model and regression evaluator
-- 3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `maxDepth`, `maxIter`, and `stepSize`
+1. Split the data into training and testing set
+2. Build the Gradient Boosted Decision Tree model and regression evaluator
+3. Create the parameter grid for hyperparameter tuning. For the tuning parameter, we select `maxDepth`, `maxIter`, and `stepSize`
     - `maxDepth`: Depth of the tree
     - `maxIter`: Maximum number of iteration
     - `stepSize`: Learning rate
-- 4. Create cross validator using the model, parameter grid, and evaluator
-- 5. Fit the model to the training data with 5-fold cross validation
-- 6. Record the mode with best performance and evaludate it on the testing set.
+4. Create cross validator using the model, parameter grid, and evaluator
+5. Fit the model to the training data with 5-fold cross validation
+6. Record the mode with best performance and evaludate it on the testing set.
 
+**Performance:** 
+- Best mode when `maxDepth=5, maxIter=20, stepSize=0.1`
+- Test RMSE = 1.622
 
 ## Pytorch implementation
-- 1. We first split the data into training, validation, test in 0.6, 0.2, 0.2 and change the X and y into numpy in each dataset.
-- 2. We have built two models, one is shallow(1 layer), one is deep(3 layers).
-- 3. We use two learning rate: [0.01,0.001] and two batch size[32,64] to do the tuning. By doing the combinations, we get our best model: {'lr': 0.01, 'batch_size': 64} for simple, and {'lr': 0.01, 'batch_size': 32} for complex.
-- 4. We then do the test and get our rmse: Simple: 2.5094, Multiple: 0.9050.
-  5. 
+We built a neural network with only one layer, which is equivalent to a linear regression mode, and a neural network with one input layer, one hidden layer, and one output layer.
+1. Split the data into training, validation, test with a ratio of 3:1:1 and change the features and labels into numpy
+2. Built two models using `nn.Linear` with `relu()` as the activation function
+3. Hyperparameter tuning:
+    - Learning rate: 0.01 and 0.001
+    - Batch size: 32, 64
+
+**Performance:** \
+Shallow network:
+- Best model when `lr = 0.01, batch_size = 64`
+- Test RMSE = 2.5094
+
+Deep network:
+- Best model when `lr = 0.01, batch_size = 64`
+- Test RMSE = 0.9050
+
+## Model comparison
+Altogether we used three different models: Linear Regression (shallow neural network), Gradient Boosted Decision Tree, and Deep neural network. Among these models, linear regression has the lowest performance. Most likely this is because the simplicity of linear regression model and the nonlinearity in the data. Gradient boosted decision tree and deep neural network have higher performance likely due to their greater complexity.
 
 
-
-
-
-  ### Video
-  If you cannot get access video, please follow the link below:
-  https://cmu.box.com/s/yuukwgewzcxpof05au0nu10dbt2refa6
+### Video
+If you cannot get access video, please follow the link below: https://cmu.box.com/s/yuukwgewzcxpof05au0nu10dbt2refa6
