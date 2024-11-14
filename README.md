@@ -164,3 +164,12 @@ We use Linear Regression and Gradient Boosted Decision Tree to train and test th
 - 2. We have built two models, one is shallow(1 layer), one is deep(3 layers).
 - 3. We use two learning rate: [0.01,0.001] and two batch size[32,64] to do the tuning. By doing the combinations, we get our best model: {'lr': 0.01, 'batch_size': 64} for simple, and {'lr': 0.01, 'batch_size': 32} for complex.
 - 4. We then do the test and get our rmse: Simple: 2.5094, Multiple: 0.9050.
+  5. 
+
+
+
+
+
+  ### Video
+  If you cannot get access video, please follow the link below:
+  https://cmu.box.com/s/yuukwgewzcxpof05au0nu10dbt2refa6
